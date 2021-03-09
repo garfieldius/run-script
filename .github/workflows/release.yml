@@ -34,4 +34,4 @@ jobs:
 
       - name: Upload version ${{ steps.version.outputs.VERSION }} to TER
         run: |
-          php ~/.composer/vendor/bin/tailor ter:publish ${{ steps.version.outputs.VERSION }} --artefact=${{ env.REPOSITORY_URL }}/archive/${{ steps.get_version.outputs.VERSION }}.zip --comment="Version ${{ steps.get_version.outputs.VERSION }} - please see ${{ env.REPOSITORY_URL }} for details"
+          php ~/.composer/vendor/bin/tailor ter:publish ${{ steps.version.outputs.VERSION }} --artefact=${{ env.REPOSITORY_URL }}/archive/${{ steps.version.outputs.VERSION }}.zip --comment="TER release of version ${{ steps.version.outputs.VERSION }} - please see ${{ env.REPOSITORY_URL }}/releases/tag/v${{ steps.version.outputs.VERSION }} for details"
