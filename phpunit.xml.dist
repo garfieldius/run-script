@@ -4,7 +4,7 @@
     backupGlobals="true"
     bootstrap="vendor/autoload.php"
     colors="true"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd">
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/8.5/phpunit.xsd">
 
     <testsuites>
         <testsuite name="RunScript">
@@ -12,10 +12,10 @@
         </testsuite>
     </testsuites>
 
-    <coverage processUncoveredFiles="true">
-        <include>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">src/</directory>
-        </include>
-    </coverage>
+        </whitelist>
+    </filter>
 
 </phpunit>
