@@ -10,10 +10,7 @@ jobs:
   ter:
 
     name: TER
-    runs-on: ubuntu-latest
-    needs:
-      - code-style
-      - unit-test
+    runs-on: ubuntu-20.04
     env:
       TYPO3_EXTENSION_KEY: 'run_script'
       REPOSITORY_URL: 'https://github.com/garfieldius/run-script'
