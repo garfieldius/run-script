@@ -11,9 +11,6 @@ jobs:
 
     strategy:
       matrix:
-        typo3:
-          - '10.4'
-          - '11.1'
         php:
           - '7.2'
           - '7.3'
@@ -38,7 +35,7 @@ jobs:
           php vendor/bin/phpunit -c phpunit.xml.dist
 
       - name: Test TYPO3 v11
-        if: matrix.typo3 == '7.4'
+        if: matrix.php == '7.4'
         run: |
           jq 'del(.require)' composer.json | jq 'del(.["require-dev"])' > c.json
           rm -rf composer.lock vendor public composer.json
