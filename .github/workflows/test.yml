@@ -1,0 +1,38 @@
+
+name: 'Test'
+
+on: [ push, pull_request ]
+
+jobs:
+
+  unit-test:
+    name: Unit Testing
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        typo3:
+          - '10'
+          - '11'
+        php:
+          - '7.2'
+          - '7.3'
+          - '7.4'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: nanasess/setup-php@master
+        with:
+          php-version: ${{ matrix.php }}
+
+      - name: Test TYPO3 ${{ matrix.typo3 }}
+        run: |
+          jq 'del(.require)' composer.json | jq 'del(.["require-dev"])' > c.json
+          rm -rf composer.lock vendor public composer.json
+          mv c.json composer.json
+          composer require --ansi -n --no-progress typo3/cms-backend:^${{ matrix.typo3 }} typo3/cms-fluid:^${{ matrix.typo3 }}
+          composer require --dev --ansi -n --no-progress phpunit/phpunit
+          php vendor/bin/phpunit -c phpunit.xml.dist

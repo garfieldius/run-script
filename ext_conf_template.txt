@@ -1,0 +1,6 @@
+
+# cat=basic; type=boolean; label=LLL:EXT:run_script/Resources/Private/Language/locallang.xlf:extconf.enableDemo
+enableDemo = 0
+
+# cat=basic; type=boolean; label=LLL:EXT:run_script/Resources/Private/Language/locallang.xlf:extconf.disableForAdmins
+disableForAdmins = 0

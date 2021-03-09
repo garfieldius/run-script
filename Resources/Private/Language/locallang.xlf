@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file source-language="en" date="2021-02-24T13:23:20+01:00">
+		<body>
+			<trans-unit id="extconf.enableDemo" resname="extconf.enableDemo">
+				<source>Enable demo scripts</source>
+			</trans-unit>
+			<trans-unit id="extconf.disableForAdmins" resname="extconf.disableForAdmins">
+				<source>Disable always access for administators</source>
+			</trans-unit>
+			<trans-unit id="demo.bash" resname="demo.bash">
+				<source>Example bash script</source>
+			</trans-unit>
+			<trans-unit id="toolbar.title" resname="toolbar.title">
+				<source>Run script</source>
+			</trans-unit>
+			<trans-unit id="dropdown.header" resname="dropdown.header">
+				<source>Run script</source>
+			</trans-unit>
+			<trans-unit id="modal.header.error" resname="modal.header.error">
+				<source>Script error</source>
+			</trans-unit>
+			<trans-unit id="modal.header.success" resname="modal.header.success">
+				<source>Script success</source>
+			</trans-unit>
+			<trans-unit id="modal.header.running" resname="modal.header.running">
+				<source>Script running</source>
+			</trans-unit>
+			<trans-unit id="message.alreadyrunning" resname="message.alreadyrunning">
+				<source>Another process of this script is already running</source>
+			</trans-unit>
+			<trans-unit id="error.nostart" resname="error.nostart">
+				<source>The script errored during start</source>
+			</trans-unit>
+			<trans-unit id="message.started" resname="message.started">
+				<source>The script started and is now running</source>
+			</trans-unit>
+			<trans-unit id="error.noscript" resname="error.noscript">
+				<source>No script was given</source>
+			</trans-unit>
+			<trans-unit id="error.invalidscript" resname="error.invalidscript">
+				<source>The script does not exist or is not accessible</source>
+			</trans-unit>
+			<trans-unit id="message.running" resname="message.running">
+				<source>The script is currently running</source>
+			</trans-unit>
+			<trans-unit id="message.idle" resname="message.idle">
+				<source>The script is waiting and can be started</source>
+			</trans-unit>
+			<trans-unit id="message.finished" resname="message.finished">
+				<source>The script finished its run</source>
+			</trans-unit>
+			<trans-unit id="message.reload" resname="message.reload">
+				<source>The script finished and the backend will reload shortly</source>
+			</trans-unit>
+			<trans-unit id="demo.sleep.script" resname="demo.sleep.script">
+				<source>Bash sleep script</source>
+			</trans-unit>
+			<trans-unit id="demo.sleep.command" resname="demo.sleep.command">
+				<source>Bash sleep command</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

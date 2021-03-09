@@ -1,0 +1,23 @@
+
+name: 'Code Style'
+
+on: [ push, pull_request ]
+
+jobs:
+  code-style:
+    name: Checking Code Style
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: nanasess/setup-php@master
+        with:
+          php-version: 7.2
+
+      - name: Check code style
+        run: |
+          composer install --ignore-platform-reqs --no-progress -n --ansi
+          php vendor/bin/php-cs-fixer fix --config=.php_cs.dist --diff --dry-run --diff-format=udiff
