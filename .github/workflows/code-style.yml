@@ -6,7 +6,7 @@ on: [ push, pull_request ]
 jobs:
   code-style:
     name: Checking Code Style
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
       - name: Checkout repository
@@ -19,5 +19,5 @@ jobs:
 
       - name: Check code style
         run: |
-          composer install --ignore-platform-reqs --no-progress -n --ansi
+          composer install --ignore-platform-reqs --no-progress -n --ansi --no-plugins --no-scripts
           php vendor/bin/php-cs-fixer fix --config=.php_cs.dist --diff --dry-run --diff-format=udiff
