@@ -2,7 +2,7 @@
     "name": "grossberger-georg/run-script",
     "type": "typo3-cms-extension",
     "description": "Run a server-side script via the backend",
-    "license": "MPL-2.0",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "GrossbergerGeorg\\RunScript\\": "src/"

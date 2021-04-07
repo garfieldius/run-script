@@ -5,10 +5,10 @@ declare(strict_types=1);
  * (c) 2021 Georg Großberger <contact@grossberger-ge.org>
  *
  * This file is free software; you can redistribute it and/or
- * modify it under the terms of the Mozilla Public License 2.0
+ * modify it under the terms of the MIT license
  *
  * For the full copyright and license information see the file
- * LICENSE or <https://www.mozilla.org/en-US/MPL/2.0/>
+ * LICENSE or <https://opensource.org/licenses/MIT>
  */
 
 $EM_CONF[$_EXTKEY] = [

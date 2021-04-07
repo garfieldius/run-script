@@ -84,7 +84,7 @@ tx_runscript.allowed = tx_shop_import_products, tx_shop_export_orders
 
 ## License
 
-Mozilla Public License 2.0, see [LICENSE](./LICENSE) or <https://www.mozilla.org/en-US/MPL/2.0/>
+MIT License, see [LICENSE](./LICENSE) or <https://opensource.org/licenses/MIT>
 
 Logo and icon from [Bootstrap Icons](https://icons.getbootstrap.com/), released under the [MIT](https://github.com/twbs/icons/blob/main/LICENSE.md) license.
 
