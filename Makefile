@@ -18,6 +18,10 @@ test: vendor/autoload.php phpunit.xml
 coverage: vendor/autoload.php phpunit.xml
 	@rm -rf report && mkdir report && XDEBUG_MODE=coverage vendor/bin/phpunit -c phpunit.xml --coverage-html report/
 
+.PHONY: clean
+clean:
+	@rm -rf report vendor
+
 phpunit.xml: phpunit.xml.dist
 	@cp phpunit.xml.dist phpunit.xml && touch phpunit.xml
 
@@ -25,4 +29,4 @@ phpunit.xml: phpunit.xml.dist
 	@cp .php_cs.dist .php_cs && touch .php_cs
 
 vendor/autoload.php: composer.json composer.lock
-	@composer install && touch vendor/autoload.php
+	@composer install --no-plugins --no-scripts && touch vendor/autoload.php
