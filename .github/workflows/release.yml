@@ -16,6 +16,7 @@ jobs:
       REPOSITORY_URL: 'https://github.com/garfieldius/run-script'
       TYPO3_USERNAME: ${{ secrets.TYPO3_USERNAME }}
       TYPO3_PASSWORD: ${{ secrets.TYPO3_PASSWORD }}
+      TYPO3_API_TOKEN: ${{ secrets.TYPO3_API_TOKEN }}
 
     steps:
       - name: Get the version from the tag
@@ -35,4 +36,4 @@ jobs:
 
       - name: Upload version ${{ steps.version.outputs.VERSION }} to TER
         run: |
-          php ~/.composer/vendor/bin/tailor ter:publish ${{ steps.version.outputs.VERSION }} --artefact=${{ env.REPOSITORY_URL }}/archive/v${{ steps.version.outputs.VERSION }}.zip --comment="TER release of version ${{ steps.version.outputs.VERSION }} - please see ${{ env.REPOSITORY_URL }}/releases/tag/v${{ steps.version.outputs.VERSION }} for details"
+          php ~/.composer/vendor/bin/tailor ter:publish ${{ steps.version.outputs.VERSION }} run_script --artefact="${{ env.REPOSITORY_URL }}/archive/v${{ steps.version.outputs.VERSION }}.zip" --comment="TER release of version ${{ steps.version.outputs.VERSION }} - please see ${{ env.REPOSITORY_URL }}/releases/tag/v${{ steps.version.outputs.VERSION }} for details"
