@@ -65,16 +65,38 @@ require(['jquery', 'TYPO3/CMS/Backend/Notification', 'TYPO3/CMS/Core/Ajax/AjaxRe
         checkStatus(el);
     }
 
-    // Fetch initial state on load
-    $("[data-toggle=tx_runscript]").each(function () {
-        var el = $(this);
+    // Traverse elements in
+    function checkAllElementsState() {
+        var els = $("[data-toggle=tx_runscript]"),
+            completed = 0;
 
-        xhrGet("status", el.data("script"), function (responseJSON) {
-            if (responseJSON.running) {
-                setActive(el);
+        function done() {
+            completed++;
+
+            if (completed >= els.length) {
+                setTimeout(checkAllElementsState, 1000);
+            }
+        }
+
+        els.each(function () {
+            var el = $(this);
+
+            if (!el.data("running")) {
+                xhrGet("status", el.data("script"), function (responseJSON) {
+                    if (responseJSON.running) {
+                        setActive(el);
+                    }
+
+                    done();
+                });
+            } else {
+                done();
             }
         });
-    });
+    }
+
+    // Fetch initial state on load
+    checkAllElementsState();
 
     // Handle script start on click
     $(document).on("click", "[data-toggle=tx_runscript]", function (event) {
