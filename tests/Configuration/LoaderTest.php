@@ -43,7 +43,14 @@ class LoaderTest extends TestCase
         $package->expects(static::any())->method('getPackagePath')->willReturn($basePath);
 
         $packageManager = $this->createMock(PackageManager::class);
-        $packageManager->expects(static::any())->method('resolvePackagePath')->with(static::equalTo($scriptRefPath))->willReturn($expected->getScript());
+
+        if (method_exists(PackageManager::class, 'resolvePackagePath')) {
+            $packageManager->expects(static::any())
+                ->method('resolvePackagePath')
+                ->with(static::equalTo($scriptRefPath))
+                ->willReturn($expected->getScript());
+        }
+
         $packageManager->expects(static::any())->method('getPackage')->with(static::equalTo($extensionKey))->willReturn($package);
         $packageManager->expects(static::any())->method('isPackageActive')->with(static::equalTo($extensionKey))->willReturn(true);
 
