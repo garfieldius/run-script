@@ -48,7 +48,9 @@ class ScriptBuilderTest extends TestCase
         $extPath = dirname(realpath(__DIR__), 2);
         $package = $this->createMock(Package::class);
         $packageManager = $this->createMock(PackageManager::class);
+        $fullPathTemplate = $extPath . '/Resources/Private/Scripts/template.sh';
 
+        $packageManager->expects(static::any())->method('resolvePackagePath')->with(static::equalTo('EXT:run_script/Resources/Private/Scripts/template.sh'))->willReturn($fullPathTemplate);
         $packageManager->expects(static::any())->method('isPackageActive')->with(static::equalTo('run_script'))->willReturn(true);
         $packageManager->expects(static::any())->method('getPackage')->with(static::equalTo('run_script'))->willReturn($package);
         $package->expects(static::any())->method('getPackagePath')->willReturn($extPath . '/');

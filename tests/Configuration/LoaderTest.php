@@ -31,9 +31,10 @@ class LoaderTest extends TestCase
         $basePath = '/root/path/of/my_ext/';
         $expected = new Script('runscript-terminal', 'tx_runscript_test', 'test', $basePath . ltrim($scriptPath, '/'), 5);
         $ll = 'LLL:TEST';
+        $scriptRefPath = 'EXT:' . $extensionKey . $scriptPath;
 
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['run_script']['tx_runscript_test'] = [
-            'script'        => 'EXT:' . $extensionKey . $scriptPath,
+            'script'        => $scriptRefPath,
             'label'         => $ll,
             'reloadBackend' => (string) $expected->getReloadBackend(),
         ];
@@ -42,6 +43,7 @@ class LoaderTest extends TestCase
         $package->expects(static::any())->method('getPackagePath')->willReturn($basePath);
 
         $packageManager = $this->createMock(PackageManager::class);
+        $packageManager->expects(static::any())->method('resolvePackagePath')->with(static::equalTo($scriptRefPath))->willReturn($expected->getScript());
         $packageManager->expects(static::any())->method('getPackage')->with(static::equalTo($extensionKey))->willReturn($package);
         $packageManager->expects(static::any())->method('isPackageActive')->with(static::equalTo($extensionKey))->willReturn(true);
 
