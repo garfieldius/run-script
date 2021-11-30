@@ -20,7 +20,7 @@ coverage: vendor/autoload.php phpunit.xml
 
 .PHONY: clean
 clean:
-	@rm -rf report vendor
+	@rm -rf report vendor .php_cs.cache .php_cs .phpunit.result.cache phpunit.xml
 
 phpunit.xml: phpunit.xml.dist
 	@cp phpunit.xml.dist phpunit.xml && touch phpunit.xml
