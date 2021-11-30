@@ -16,7 +16,6 @@ namespace GrossbergerGeorg\RunScript\Configuration;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\StringUtility;
 
 /**
  * @author Georg Großberger <contact@grossberger-ge.org>
@@ -54,13 +53,13 @@ class Loader
             $icon = $config['icon'] ?? 'runscript-terminal';
             $script = $config['script'];
 
-            if (StringUtility::beginsWith($script, 'EXT:')) {
+            if (strncmp($script, 'EXT:', 4) === 0) {
                 $script = GeneralUtility::getFileAbsFileName($script);
             }
 
             $label = $config['label'];
 
-            if (StringUtility::beginsWith($label, 'LLL:')) {
+            if (strncmp($label, 'LLL:', 4) === 0) {
                 $label = $this->languageService->sL($label);
             }
 
