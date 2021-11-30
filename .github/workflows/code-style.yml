@@ -15,9 +15,8 @@ jobs:
       - name: Setup PHP
         uses: nanasess/setup-php@master
         with:
-          php-version: 7.2
+          php-version: 7.4
 
       - name: Check code style
         run: |
-          composer install --ignore-platform-reqs --no-progress -n --ansi --no-plugins --no-scripts
-          php vendor/bin/php-cs-fixer fix --config=.php_cs.dist --diff --dry-run --diff-format=udiff
+          make style-check

@@ -3,12 +3,12 @@
 build: vendor/autoload.php
 
 .PHONY: style-check
-style-check: vendor/autoload.php .php_cs
-	@vendor/bin/php-cs-fixer fix --config=.php_cs -vvv --diff --diff-format=udiff --dry-run
+style-check: vendor/autoload.php .php-cs-fixer.php
+	@vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php -vvv --diff --dry-run
 
 .PHONY: style-fix
-style-fix: vendor/autoload.php .php_cs
-	@vendor/bin/php-cs-fixer fix --config=.php_cs -vvv --diff --diff-format=udiff
+style-fix: vendor/autoload.php .php-cs-fixer.php
+	@vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php -vvv --diff
 
 .PHONY: test
 test: vendor/autoload.php phpunit.xml
@@ -20,13 +20,13 @@ coverage: vendor/autoload.php phpunit.xml
 
 .PHONY: clean
 clean:
-	@rm -rf report vendor .php_cs.cache .php_cs .phpunit.result.cache phpunit.xml
+	@rm -rf report vendor .php-cs-fixer.cache .php-cs-fixer.php .phpunit.result.cache phpunit.xml
 
 phpunit.xml: phpunit.xml.dist
 	@cp phpunit.xml.dist phpunit.xml && touch phpunit.xml
 
-.php_cs: .php_cs.dist
-	@cp .php_cs.dist .php_cs && touch .php_cs
+.php-cs-fixer.php: .php-cs-fixer.php.dist
+	@cp .php-cs-fixer.php.dist .php-cs-fixer.php && touch .php-cs-fixer.php
 
 vendor/autoload.php: composer.json composer.lock
 	@composer install --no-plugins --no-scripts && touch vendor/autoload.php

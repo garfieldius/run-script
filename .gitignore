@@ -2,7 +2,7 @@
 /public
 /report
 /vendor
-/.php_cs.cache
+/.php-cs-fixer.cache
 /.phpunit.result.cache
-/.php_cs
+/.php-cs-fixer.php
 /phpunit.xml

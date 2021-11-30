@@ -141,7 +141,7 @@ return (new Config())
         'space_after_semicolon'                  => true,
         'standardize_not_equals'                 => true,
         'ternary_operator_spaces'                => true,
-        'trailing_comma_in_multiline_array'      => true,
+        'trailing_comma_in_multiline'            => true,
         'trim_array_spaces'                      => true,
     ])
     ->setFinder($finder);
