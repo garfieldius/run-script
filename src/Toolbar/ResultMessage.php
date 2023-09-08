@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /*
- * (c) 2021 Georg Großberger <contact@grossberger-ge.org>
+ * (c) 2023 Georg Großberger <contact@grossberger-ge.org>
  *
  * This file is free software; you can redistribute it and/or
  * modify it under the terms of the MIT license
@@ -21,84 +21,36 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class ResultMessage implements \JsonSerializable
 {
     /**
-     * @var bool
+     * @param bool $started
+     * @param bool $running
+     * @param string $message
+     * @param string $error
      */
-    private $started = false;
-
-    /**
-     * @var bool
-     */
-    private $running = false;
-
-    /**
-     * @var string
-     */
-    private $message = '';
-
-    /**
-     * @var string
-     */
-    private $error = '';
+    public function __construct(
+        public readonly bool $started,
+        public readonly bool $running,
+        public readonly string $message,
+        public readonly string $error
+    ) {
+    }
 
     public static function error(string $error, $running = false, $started = false): self
     {
-        $result = GeneralUtility::makeInstance(self::class);
-        $result->error = $error;
-        $result->started = $started;
-        $result->running = $running;
-
-        return $result;
+        return GeneralUtility::makeInstance(self::class, $started, $running, '', $error);
     }
 
     public static function message(string $message, $running = false, $started = false): self
     {
-        $result = GeneralUtility::makeInstance(self::class);
-        $result->message = $message;
-        $result->started = $started;
-        $result->running = $running;
-
-        return $result;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isStarted(): bool
-    {
-        return $this->started;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isRunning(): bool
-    {
-        return $this->running;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMessage(): string
-    {
-        return $this->message;
-    }
-
-    /**
-     * @return string
-     */
-    public function getError(): string
-    {
-        return $this->error;
+        return GeneralUtility::makeInstance(self::class, $started, $running, $message, '');
     }
 
     public function jsonSerialize()
     {
         return [
-            'started' => $this->isStarted(),
-            'running' => $this->isRunning(),
-            'message' => $this->getMessage() ?: null,
-            'error'   => $this->getError() ?: null,
+            'started' => $this->started,
+            'running' => $this->running,
+            'message' => $this->message ?: null,
+            'error'   => $this->error ?: null,
         ];
     }
 }

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /*
- * (c) 2021 Georg Großberger <contact@grossberger-ge.org>
+ * (c) 2023 Georg Großberger <contact@grossberger-ge.org>
  *
  * This file is free software; you can redistribute it and/or
  * modify it under the terms of the MIT license
@@ -16,8 +16,6 @@ namespace GrossbergerGeorg\RunScript\Toolbar;
 use GrossbergerGeorg\RunScript\Configuration\Loader;
 use GrossbergerGeorg\RunScript\Configuration\Script;
 use GrossbergerGeorg\RunScript\Runner\ScriptStatus;
-use TYPO3\CMS\Core\Localization\LanguageService;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @author Georg Großberger <g.grossberger@supseven.at>
@@ -30,15 +28,13 @@ class StatusRequestHandler extends AjaxRequestHandler
     private $status;
 
     /**
-     * @param ScriptStatus|null $status
-     * @param Loader|null $configurationLoader
-     * @param LanguageService|null $languageService
+     * @param ScriptStatus $status
+     * @param Loader $configurationLoader
      */
-    public function __construct(ScriptStatus $status = null, Loader $configurationLoader = null, LanguageService $languageService = null)
+    public function __construct(ScriptStatus $status, Loader $configurationLoader)
     {
-        $this->status = $status ?? GeneralUtility::makeInstance(ScriptStatus::class);
-        $this->languageService = $languageService ?? LanguageService::createFromUserPreferences($GLOBALS['BE_USER']);
-        $this->configurationLoader = $configurationLoader ?? GeneralUtility::makeInstance(Loader::class);
+        $this->status = $status;
+        $this->configurationLoader = $configurationLoader;
     }
 
     protected function handleScript(Script $script): ResultMessage

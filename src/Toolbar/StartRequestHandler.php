@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /*
- * (c) 2021 Georg Großberger <contact@grossberger-ge.org>
+ * (c) 2023 Georg Großberger <contact@grossberger-ge.org>
  *
  * This file is free software; you can redistribute it and/or
  * modify it under the terms of the MIT license
@@ -17,8 +17,6 @@ use GrossbergerGeorg\RunScript\Configuration\Loader;
 use GrossbergerGeorg\RunScript\Configuration\Script;
 use GrossbergerGeorg\RunScript\Runner\ScriptStart;
 use GrossbergerGeorg\RunScript\Runner\ScriptStatus;
-use TYPO3\CMS\Core\Localization\LanguageService;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @author Georg Großberger <g.grossberger@supseven.at>
@@ -28,30 +26,23 @@ class StartRequestHandler extends AjaxRequestHandler
     /**
      * @var ScriptStart
      */
-    private $starter;
+    private ScriptStart $starter;
 
     /**
      * @var ScriptStatus
      */
-    private $status;
+    private ScriptStatus $status;
 
     /**
-     * AjaxRunner constructor.
-     * @param ScriptStart|null $starter
-     * @param ScriptStatus|null $status
-     * @param Loader|null $configurationLoader
-     * @param LanguageService|null $languageService
+     * @param Loader $configurationLoader
+     * @param ScriptStart $starter
+     * @param ScriptStatus $status
      */
-    public function __construct(
-        ScriptStart $starter = null,
-        ScriptStatus $status = null,
-        Loader $configurationLoader = null,
-        LanguageService $languageService = null
-    ) {
-        $this->starter = $starter ?? GeneralUtility::makeInstance(ScriptStart::class);
-        $this->status = $status ?? GeneralUtility::makeInstance(ScriptStatus::class);
-        $this->languageService = $languageService ?? LanguageService::createFromUserPreferences($GLOBALS['BE_USER']);
-        $this->configurationLoader = $configurationLoader ?? GeneralUtility::makeInstance(Loader::class);
+    public function __construct(Loader $configurationLoader, ScriptStart $starter, ScriptStatus $status)
+    {
+        $this->configurationLoader = $configurationLoader;
+        $this->starter = $starter;
+        $this->status = $status;
     }
 
     protected function handleScript(Script $script): ResultMessage

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /*
- * (c) 2021 Georg Großberger <contact@grossberger-ge.org>
+ * (c) 2023 Georg Großberger <contact@grossberger-ge.org>
  *
  * This file is free software; you can redistribute it and/or
  * modify it under the terms of the MIT license
@@ -16,7 +16,6 @@ namespace GrossbergerGeorg\RunScript\Tests\Toolbar;
 use GrossbergerGeorg\RunScript\Toolbar\ViewFactory;
 use PHPUnit\Framework\TestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class ViewFactoryTest extends TestCase
@@ -26,17 +25,13 @@ class ViewFactoryTest extends TestCase
         $template = 'Tmpl';
         $basedir = '/my/root/path/';
 
-        $request = $this->createMock(Request::class);
-        $request->expects(static::once())->method('setControllerExtensionName')->with(self::equalTo('RunScript'));
-
         $view = $this->createMock(StandaloneView::class);
         $view->expects(static::once())->method('setTemplateRootPaths')->with(static::equalTo([$basedir . 'Templates/']));
         $view->expects(static::once())->method('setTemplate')->with(static::equalTo($template));
-        $view->expects(static::once())->method('getRequest')->willReturn($request);
 
         GeneralUtility::addInstance(StandaloneView::class, $view);
 
-        $subject = new ViewFactory($basedir);
-        $subject->createView($template);
+        $subject = new ViewFactory();
+        $subject->createView($template, $basedir);
     }
 }

@@ -2,32 +2,26 @@
       xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
       data-namespace-typo3-fluid="true">
 
-<f:be.pageRenderer addJsInlineLabels="{
-    0: 'modal.header.error',
-    1: 'modal.header.success',
-    2: 'modal.header.running',
-    3: 'message.finished',
-    4: 'message.reload'
-}" includeJsFiles="{0: '{f:uri.resource(path: \'JavaScript/RunScript.js\', extensionName: \'RunScript\')}'}" />
+<f:be.pageRenderer includeJavaScriptModules="{0: '@grossberger-georg/run-script/dropdown.js'}" />
 
-<h3 class="dropdown-headline"><f:translate key="dropdown.header" /></h3>
+<h3 class="dropdown-headline"><f:translate key="LLL:EXT:run_script/Resources/Private/Language/locallang.xlf:dropdown.header" /></h3>
 
-<hr>
+<hr class="dropdown-divider">
 
-<div class="dropdown-table">
+<ul class="dropdown-list">
 
     <f:for each="{items}" as="item">
-        <div class="dropdown-table-row">
-            <a href="#" data-toggle="tx_runscript" data-script="{item.key}" data-reload-backend="{item.reloadBackend}">
-                <div class="dropdown-table-column dropdown-table-icon">
-                    <div data-container="status-idle"><c:icon identifier="{item.icon}" size="small" /></div>
-                    <div data-container="status-busy" style="display: none"><c:icon identifier="spinner-circle-light" size="small" /></div>
-                </div>
-                <div class="dropdown-table-column dropdown-table-title">{item.label}</div>
+        <li>
+            <a href="#" class="dropdown-item" data-toggle="tx_runscript" data-script="{item.key}" data-reload-backend="{item.reloadBackend}">
+                <span class="dropdown-item-columns">
+                    <span class="dropdown-item-column dropdown-item-column-icon" data-container="status-idle"><c:icon identifier="{item.icon}" size="small" /></span>
+                    <span class="dropdown-item-column dropdown-item-column-icon text-info hidden" data-container="status-busy"><c:icon identifier="spinner-circle-light" size="small" /></span>
+                    <span class="dropdown-item-column dropdown-item-column-text">{item.label}</span>
+                </span>
             </a>
-        </div>
+        </li>
     </f:for>
 
-</div>
+</ul>
 
 </html>

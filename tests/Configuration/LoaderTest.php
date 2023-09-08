@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /*
- * (c) 2021 Georg Großberger <contact@grossberger-ge.org>
+ * (c) 2023 Georg Großberger <contact@grossberger-ge.org>
  *
  * This file is free software; you can redistribute it and/or
  * modify it under the terms of the MIT license
@@ -18,6 +18,7 @@ use GrossbergerGeorg\RunScript\Configuration\Script;
 use PHPUnit\Framework\TestCase;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Package\Package;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -36,7 +37,7 @@ class LoaderTest extends TestCase
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['run_script']['tx_runscript_test'] = [
             'script'        => $scriptRefPath,
             'label'         => $ll,
-            'reloadBackend' => (string) $expected->getReloadBackend(),
+            'reloadBackend' => (string) $expected->reloadBackend,
         ];
 
         $package = $this->createMock(Package::class);
@@ -48,7 +49,7 @@ class LoaderTest extends TestCase
             $packageManager->expects(static::any())
                 ->method('resolvePackagePath')
                 ->with(static::equalTo($scriptRefPath))
-                ->willReturn($expected->getScript());
+                ->willReturn($expected->script);
         }
 
         $packageManager->expects(static::any())->method('getPackage')->with(static::equalTo($extensionKey))->willReturn($package);
@@ -57,11 +58,15 @@ class LoaderTest extends TestCase
         ExtensionManagementUtility::setPackageManager($packageManager);
 
         $languageService = $this->createMock(LanguageService::class);
-        $languageService->expects(static::any())->method('sL')->with(static::equalTo($ll))->willReturn($expected->getLabel());
+        $languageService->expects(static::any())->method('sL')->with(static::equalTo($ll))->willReturn($expected->label);
 
         $backendUser = $this->createMock(BackendUserAuthentication::class);
+        $GLOBALS['BE_USER'] = &$backendUser;
 
-        $subject = new Loader($languageService, $backendUser);
+        $languageServiceFactory = $this->createMock(LanguageServiceFactory::class);
+        $languageServiceFactory->expects(self::any())->method('createFromUserPreferences')->with(self::equalTo($backendUser))->willReturn($languageService);
+
+        $subject = new Loader($languageServiceFactory);
         $actual = $subject->loadAll();
 
         static::assertEquals([$expected], $actual);
@@ -96,13 +101,17 @@ class LoaderTest extends TestCase
 
         $backendUser->expects(static::any())->method('isAdmin')->willReturn(false);
         $backendUser->expects(static::any())->method('getTSConfig')->willReturn($TSConfig);
+        $GLOBALS['BE_USER'] = &$backendUser;
 
         $expected = [
             new Script('runscript-terminal', 'tx_runscript_test1', 'Script 1', $script, 4),
             new Script('runscript-terminal', 'tx_runscript_test3', 'Script 3', $script, 0),
         ];
 
-        $subject = new Loader($languageService, $backendUser);
+        $languageServiceFactory = $this->createMock(LanguageServiceFactory::class);
+        $languageServiceFactory->expects(self::any())->method('createFromUserPreferences')->with(self::equalTo($backendUser))->willReturn($languageService);
+
+        $subject = new Loader($languageServiceFactory);
 
         $actual = $subject->getForCurrentUser();
 

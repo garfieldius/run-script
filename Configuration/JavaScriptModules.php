@@ -12,12 +12,11 @@ declare(strict_types=1);
  */
 
 return [
-    'tx_runscript_start' => [
-        'path'   => '/ext/runscript/start',
-        'target' => \GrossbergerGeorg\RunScript\Toolbar\StartRequestHandler::class . '::process',
+    'dependencies' => [
+        'core',
+        'backend',
     ],
-    'tx_runscript_status' => [
-        'path'   => '/ext/runscript/status',
-        'target' => \GrossbergerGeorg\RunScript\Toolbar\StatusRequestHandler::class . '::process',
+    'imports' => [
+        '@grossberger-georg/run-script/' => 'EXT:run_script/Resources/Public/JavaScript/',
     ],
 ];

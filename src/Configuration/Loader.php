@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /*
- * (c) 2021 Georg Großberger <contact@grossberger-ge.org>
+ * (c) 2023 Georg Großberger <contact@grossberger-ge.org>
  *
  * This file is free software; you can redistribute it and/or
  * modify it under the terms of the MIT license
@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace GrossbergerGeorg\RunScript\Configuration;
 
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -22,24 +22,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class Loader
 {
-    /**
-     * @var LanguageService
-     */
-    private $languageService;
-
-    /**
-     * @var mixed|BackendUserAuthentication
-     */
-    private $backendUser;
-
-    /**
-     * @param LanguageService|null $languageService
-     * @param BackendUserAuthentication|null $backendUser
-     */
-    public function __construct(LanguageService $languageService = null, BackendUserAuthentication $backendUser = null)
-    {
-        $this->backendUser = $backendUser ?? $GLOBALS['BE_USER'];
-        $this->languageService = $languageService ?? LanguageService::createFromUserPreferences($this->backendUser);
+    public function __construct(
+        private readonly LanguageServiceFactory $languageServiceFactory,
+    ) {
     }
 
     /**
@@ -48,6 +33,7 @@ class Loader
     public function loadAll(): array
     {
         $scripts = [];
+        $languageService = $this->languageServiceFactory->createFromUserPreferences($this->getBackendUser());
 
         foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['run_script'] ?? [] as $key => $config) {
             $icon = $config['icon'] ?? 'runscript-terminal';
@@ -60,7 +46,7 @@ class Loader
             $label = $config['label'];
 
             if (strncmp($label, 'LLL:', 4) === 0) {
-                $label = $this->languageService->sL($label);
+                $label = $languageService->sL($label);
             }
 
             $reload = (int) ($config['reloadBackend'] ?? 0);
@@ -83,8 +69,8 @@ class Loader
      */
     public function getForCurrentUser(): array
     {
-        $allowAll = !($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['run_script']['disableForAdmins'] ?? false) && $this->backendUser->isAdmin();
-        $allowed = GeneralUtility::trimExplode(',', $this->backendUser->getTSConfig()['tx_runscript.']['allowed'] ?? '', true);
+        $allowAll = !($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['run_script']['disableForAdmins'] ?? false) && $this->getBackendUser()->isAdmin();
+        $allowed = GeneralUtility::trimExplode(',', $this->getBackendUser()->getTSConfig()['tx_runscript.']['allowed'] ?? '', true);
 
         if (!$allowed && !$allowAll) {
             return [];
@@ -94,10 +80,15 @@ class Loader
 
         if ($available && !$allowAll) {
             $available = array_values(array_filter($available, function (Script $script) use ($allowed) {
-                return in_array($script->getKey(), $allowed);
+                return in_array($script->key, $allowed);
             }));
         }
 
         return $available;
+    }
+
+    private function getBackendUser(): BackendUserAuthentication
+    {
+        return $GLOBALS['BE_USER'];
     }
 }

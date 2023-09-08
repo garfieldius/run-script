@@ -1,13 +1,7 @@
 #!/usr/bin/env bash
 
-COMBOS='7.2-9.5
-7.3-9.5
-7.4-9.5
-7.2-10.4
-7.3-10.4
-7.4-10.4
-7.4-11.5
-8.0-11.5'
+COMBOS='8.1-12.4
+8.2-12.4'
 
 C_HOME=$(composer global config home -q)
 C_CACHE=$(composer global config cache-dir -q)

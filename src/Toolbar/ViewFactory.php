@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /*
- * (c) 2021 Georg Großberger <contact@grossberger-ge.org>
+ * (c) 2023 Georg Großberger <contact@grossberger-ge.org>
  *
  * This file is free software; you can redistribute it and/or
  * modify it under the terms of the MIT license
@@ -23,28 +23,17 @@ use TYPO3Fluid\Fluid\View\ViewInterface;
  */
 class ViewFactory
 {
-    /**
-     * @var string
-     */
-    private $baseDir;
-
-    /**
-     * ViewFactory constructor.
-     * @param string $baseDir
-     */
-    public function __construct(string $baseDir = null)
+    public function createView(string $template, string $baseDir = ''): ViewInterface
     {
-        $this->baseDir = $baseDir ?: ExtensionManagementUtility::extPath('run_script') . 'Resources/Private/';
-    }
+        if (!$baseDir) {
+            $baseDir = ExtensionManagementUtility::extPath('run_script') . 'Resources/Private/';
+        }
 
-    public function createView(string $template): ViewInterface
-    {
         $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setTemplateRootPaths([$this->baseDir . 'Templates/']);
-        $view->setPartialRootPaths([$this->baseDir . 'Partials/']);
-        $view->setLayoutRootPaths([$this->baseDir . 'Layouts/']);
+        $view->setTemplateRootPaths([$baseDir . 'Templates/']);
+        $view->setPartialRootPaths([$baseDir . 'Partials/']);
+        $view->setLayoutRootPaths([$baseDir . 'Layouts/']);
         $view->setTemplate($template);
-        $view->getRequest()->setControllerExtensionName('RunScript');
 
         return $view;
     }

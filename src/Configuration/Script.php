@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /*
- * (c) 2021 Georg Großberger <contact@grossberger-ge.org>
+ * (c) 2023 Georg Großberger <contact@grossberger-ge.org>
  *
  * This file is free software; you can redistribute it and/or
  * modify it under the terms of the MIT license
@@ -19,31 +19,6 @@ namespace GrossbergerGeorg\RunScript\Configuration;
 class Script
 {
     /**
-     * @var string
-     */
-    private $icon;
-
-    /**
-     * @var string
-     */
-    private $key;
-
-    /**
-     * @var string
-     */
-    private $label;
-
-    /**
-     * @var string
-     */
-    private $script;
-
-    /**
-     * @var int
-     */
-    private $reloadBackend;
-
-    /**
      * Script constructor.
      * @param string $icon
      * @param string $key
@@ -51,52 +26,12 @@ class Script
      * @param string $script
      * @param int $reloadBackend
      */
-    public function __construct(string $icon, string $key, string $label, string $script, int $reloadBackend)
-    {
-        $this->icon = $icon;
-        $this->key = $key;
-        $this->label = $label;
-        $this->script = $script;
-        $this->reloadBackend = $reloadBackend;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIcon(): string
-    {
-        return $this->icon;
-    }
-
-    /**
-     * @return string
-     */
-    public function getKey(): string
-    {
-        return $this->key;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLabel(): string
-    {
-        return $this->label;
-    }
-
-    /**
-     * @return string
-     */
-    public function getScript(): string
-    {
-        return $this->script;
-    }
-
-    /**
-     * @return int
-     */
-    public function getReloadBackend(): int
-    {
-        return $this->reloadBackend;
+    public function __construct(
+        public readonly string $icon,
+        public readonly string $key,
+        public readonly string $label,
+        public readonly string $script,
+        public readonly int $reloadBackend,
+    ) {
     }
 }

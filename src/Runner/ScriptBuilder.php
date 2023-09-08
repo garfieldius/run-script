@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /*
- * (c) 2021 Georg Großberger <contact@grossberger-ge.org>
+ * (c) 2023 Georg Großberger <contact@grossberger-ge.org>
  *
  * This file is free software; you can redistribute it and/or
  * modify it under the terms of the MIT license
@@ -24,7 +24,7 @@ class ScriptBuilder
 {
     public function getScriptPath(Script $script): string
     {
-        return Environment::getVarPath() . '/run/tx_runscript/' . $script->getKey() . '.sh';
+        return Environment::getVarPath() . '/run/tx_runscript/' . $script->key . '.sh';
     }
 
     public function createScript(Script $script): string
@@ -46,9 +46,9 @@ class ScriptBuilder
             '__SCRIPT__',
         ], [
             escapeshellarg(Environment::getProjectPath()),
-            escapeshellarg($script->getKey()),
+            escapeshellarg($script->key),
             implode("\n    ", $exports),
-            $script->getScript(),
+            $script->script,
         ], $template);
 
         $dir = dirname($file);

@@ -14,11 +14,11 @@
         }
     },
     "require": {
-        "php": "^7.2 || ^8.0",
-        "typo3/cms-backend": "^9.5 || ^10.4 || ^11.5",
-        "typo3/cms-core": "^9.5 || ^10.4 || ^11.5",
-        "typo3/cms-extbase": "^9.5 || ^10.4 || ^11.5",
-        "typo3/cms-fluid": "^9.5 || ^10.4 || ^11.5"
+        "php": "^8.1",
+        "typo3/cms-backend": "^12.4",
+        "typo3/cms-core": "^12.4",
+        "typo3/cms-extbase": "^12.4",
+        "typo3/cms-fluid": "^12.4"
     },
     "extra": {
         "typo3/cms": {
@@ -29,5 +29,11 @@
         "friendsofphp/php-cs-fixer": "^3.3",
         "phpunit/phpunit": "^9.5",
         "mikey179/vfsstream": "^1.6"
+    },
+    "config": {
+        "allow-plugins": {
+            "typo3/class-alias-loader": false,
+            "typo3/cms-composer-installers": false
+        }
     }
 }

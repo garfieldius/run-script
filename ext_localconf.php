@@ -20,11 +20,7 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['run_script']['enableDemo'] ?? fal
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['run_script']['tx_runscript_sleep2'] = [
         'label'  => 'LLL:EXT:run_script/Resources/Private/Language/locallang.xlf:demo.sleep.command',
         'script' => 'sleep 30',
+        'reloadBackend' => 2,
     ];
 }
 
-\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class)->registerIcon(
-    'runscript-terminal',
-    \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-    ['source' => 'EXT:run_script/Resources/Public/Icons/Extension.svg']
-);

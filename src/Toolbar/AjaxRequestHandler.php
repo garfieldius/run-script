@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /*
- * (c) 2021 Georg Großberger <contact@grossberger-ge.org>
+ * (c) 2023 Georg Großberger <contact@grossberger-ge.org>
  *
  * This file is free software; you can redistribute it and/or
  * modify it under the terms of the MIT license
@@ -18,22 +18,18 @@ use GrossbergerGeorg\RunScript\Configuration\Script;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use TYPO3\CMS\Core\Http\JsonResponse;
-use TYPO3\CMS\Core\Localization\LanguageService;
 
 /**
  * @author Georg Großberger <contact@grossberger-ge.org>
  */
 abstract class AjaxRequestHandler
 {
-    /**
-     * @var LanguageService
-     */
-    protected $languageService;
+    use LanguageServiceTrait;
 
     /**
      * @var Loader
      */
-    protected $configurationLoader;
+    protected Loader $configurationLoader;
 
     public function process(Request $request): Response
     {
@@ -45,7 +41,7 @@ abstract class AjaxRequestHandler
             $script = null;
 
             foreach ($this->configurationLoader->getForCurrentUser() as $availableScript) {
-                if ($availableScript->getKey() === $key) {
+                if ($availableScript->key === $key) {
                     $script = $availableScript;
                     break;
                 }
@@ -63,7 +59,7 @@ abstract class AjaxRequestHandler
 
     protected function ll(string $key, string $default): string
     {
-        return $this->languageService->sL('LLL:EXT:run_scripts/Resources/Private/Language/locallang.xlf:' . $key) ?: $default;
+        return $this->getLanguageService()->sL('LLL:EXT:run_scripts/Resources/Private/Language/locallang.xlf:' . $key) ?: $default;
     }
 
     abstract protected function handleScript(Script $script): ResultMessage;

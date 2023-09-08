@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /*
- * (c) 2021 Georg Großberger <contact@grossberger-ge.org>
+ * (c) 2023 Georg Großberger <contact@grossberger-ge.org>
  *
  * This file is free software; you can redistribute it and/or
  * modify it under the terms of the MIT license
@@ -14,25 +14,15 @@ declare(strict_types=1);
 namespace GrossbergerGeorg\RunScript\Runner;
 
 use GrossbergerGeorg\RunScript\Configuration\Script;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @author Georg Großberger <contact@grossberger-ge.org>
  */
 class ScriptStart
 {
-    /**
-     * @var ScriptBuilder
-     */
-    private $scriptBuilder;
-
-    /**
-     * ScriptStart constructor.
-     * @param ScriptBuilder|null $scriptBuilder
-     */
-    public function __construct(ScriptBuilder $scriptBuilder = null)
-    {
-        $this->scriptBuilder = $scriptBuilder ?? GeneralUtility::makeInstance(ScriptBuilder::class);
+    public function __construct(
+        private readonly ScriptBuilder $scriptBuilder
+    ) {
     }
 
     public function startScript(Script $script): int

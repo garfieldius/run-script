@@ -9,14 +9,18 @@
  * LICENSE or <https://opensource.org/licenses/MIT>
  */
 
-require(['jquery', 'TYPO3/CMS/Backend/Notification', 'TYPO3/CMS/Core/Ajax/AjaxRequest'], function ($, notify, xhr) {
+import DocumentService from '@typo3/core/document-service.js'
+import RegularEvent from '@typo3/core/event/regular-event.js';
+import AjaxRequest from '@typo3/core/ajax/ajax-request.js';
+
+DocumentService.ready().then(() => {
     function ll(key) {
         return TYPO3.lang[key] || "";
     }
 
     // Factory for TYPO3s AjaxRequest class
     function xhrGet(url, script, callback) {
-        new xhr(TYPO3.settings.ajaxUrls["tx_runscript_" + url])
+        new AjaxRequest(TYPO3.settings.ajaxUrls["tx_runscript_" + url])
             .withQueryArguments({script: script})
             .get()
             .then(function (response) {
@@ -27,26 +31,26 @@ require(['jquery', 'TYPO3/CMS/Backend/Notification', 'TYPO3/CMS/Core/Ajax/AjaxRe
     // wait for a couple ms and then fetch the status
     function checkStatus(el) {
         setTimeout(function () {
-            xhrGet("status", el.data("script"), function (responseJSON) {
+            xhrGet("status", el.dataset.script, function (responseJSON) {
                 // Scripts is not running
                 if (!responseJSON.running) {
                     // Set as not-active
-                    el.find("[data-container=status-idle]").show();
-                    el.find("[data-container=status-busy]").hide();
-                    el.data("running", false);
+                    el.querySelector("[data-container=status-idle]").classList.remove("hidden");
+                    el.querySelector("[data-container=status-busy]").classList.add("hidden");
+                    el.dataset.running = null;
 
-                    var reload = parseInt(el.data("reloadBackend")) || 0;
+                    var reload = parseInt(el.dataset.reloadBackend) || 0;
 
                     // Inform user of user/reload or just success
                     if (responseJSON.error) {
-                        notify.error(ll("modal.header.error"), responseJSON.error);
+                        top.TYPO3.Notification.error(ll("modal.header.error"), responseJSON.error);
                     } else if (reload > 0) {
-                        notify.success(ll("modal.header.success"), ll("message.reload"));
+                        top.TYPO3.Notification.success(ll("modal.header.success"), ll("message.reload"));
                         setTimeout(function () {
                             top.location.reload();
                         }, reload * 1000);
                     } else {
-                        notify.success(ll("modal.header.success"), ll("message.finished"));
+                        top.TYPO3.Notification.success(ll("modal.header.success"), ll("message.finished"));
                     }
                 } else {
                     // Recursive call to check again if still running
@@ -58,16 +62,16 @@ require(['jquery', 'TYPO3/CMS/Backend/Notification', 'TYPO3/CMS/Core/Ajax/AjaxRe
 
     // set an element as active and dispatch the checkStatus
     function setActive(el) {
-        el.data("running", true);
-        el.find("[data-container=status-idle]").hide();
-        el.find("[data-container=status-busy]").show();
+        el.dataset.running = "1";
+        el.querySelector("[data-container=status-idle]").classList.add("hidden");
+        el.querySelector("[data-container=status-busy]").classList.remove("hidden");
 
         checkStatus(el);
     }
 
     // Traverse elements in
     function checkAllElementsState() {
-        var els = $("[data-toggle=tx_runscript]"),
+        var els = document.querySelectorAll("[data-toggle=tx_runscript]"),
             completed = 0;
 
         function done() {
@@ -78,11 +82,9 @@ require(['jquery', 'TYPO3/CMS/Backend/Notification', 'TYPO3/CMS/Core/Ajax/AjaxRe
             }
         }
 
-        els.each(function () {
-            var el = $(this);
-
-            if (!el.data("running")) {
-                xhrGet("status", el.data("script"), function (responseJSON) {
+        els.forEach(function (el) {
+            if (!el.dataset.running) {
+                xhrGet("status", el.dataset.script, function (responseJSON) {
                     if (responseJSON.running) {
                         setActive(el);
                     }
@@ -99,23 +101,22 @@ require(['jquery', 'TYPO3/CMS/Backend/Notification', 'TYPO3/CMS/Core/Ajax/AjaxRe
     checkAllElementsState();
 
     // Handle script start on click
-    $(document).on("click", "[data-toggle=tx_runscript]", function (event) {
-        // event.target is usually a child of the actual tag
-        var el = $(event.target).closest("[data-toggle=tx_runscript]");
+    document.querySelectorAll('[data-toggle=tx_runscript]').forEach((el) => {
+        new RegularEvent('click', (event) => {
+            event.preventDefault();
 
-        event.preventDefault();
-
-        if (el.data("running")) {
-            return;
-        }
-
-       xhrGet("start", el.data("script"), function (responseJSON) {
-            if (responseJSON.running) {
-                setActive(el);
-                notify.info(ll("modal.header.running"), responseJSON.message);
-            } else {
-                notify.error(ll("modal.header.error"), responseJSON.error || responseJSON.message);
+            if (el.dataset.running) {
+                return;
             }
-        });
-    });
+
+            xhrGet("start", el.dataset.script, (responseJSON) => {
+                if (responseJSON.running) {
+                    setActive(el);
+                    top.TYPO3.Notification.info(ll("modal.header.running"), responseJSON.message);
+                } else {
+                    top.TYPO3.Notification.error(ll("modal.header.error"), responseJSON.error || responseJSON.message);
+                }
+            });
+        }).bindTo(el);
+    })
 });

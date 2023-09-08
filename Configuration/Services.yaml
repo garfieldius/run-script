@@ -2,7 +2,27 @@ services:
   _defaults:
     autowire: true
     autoconfigure: true
-    public: false
 
-  GrossbergerGeorg\RunScript\:
-    resource: '../src/*'
+  GrossbergerGeorg\RunScript\Configuration\Loader:
+    public: true
+
+  GrossbergerGeorg\RunScript\Runner\ScriptBuilder:
+    public: true
+
+  GrossbergerGeorg\RunScript\Runner\ScriptStart:
+    public: true
+
+  GrossbergerGeorg\RunScript\Runner\ScriptStatus:
+    public: true
+
+  GrossbergerGeorg\RunScript\Toolbar\StartRequestHandler:
+    public: true
+
+  GrossbergerGeorg\RunScript\Toolbar\StatusRequestHandler:
+    public: true
+
+  GrossbergerGeorg\RunScript\Toolbar\ToolbarItem:
+    public: true
+
+  GrossbergerGeorg\RunScript\Toolbar\ViewFactory:
+    public: true

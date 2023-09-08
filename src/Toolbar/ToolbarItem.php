@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /*
- * (c) 2021 Georg Großberger <contact@grossberger-ge.org>
+ * (c) 2023 Georg Großberger <contact@grossberger-ge.org>
  *
  * This file is free software; you can redistribute it and/or
  * modify it under the terms of the MIT license
@@ -15,32 +15,18 @@ namespace GrossbergerGeorg\RunScript\Toolbar;
 
 use GrossbergerGeorg\RunScript\Configuration\Loader;
 use TYPO3\CMS\Backend\Toolbar\ToolbarItemInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Page\PageRenderer;
 
 /**
  * @author Georg Großberger <contact@grossberger-ge.org>
  */
 class ToolbarItem implements ToolbarItemInterface
 {
-    /**
-     * @var Loader
-     */
-    private $configurationsLoader;
-
-    /**
-     * @var ViewFactory
-     */
-    private $viewFactory;
-
-    /**
-     * ToolbarItem constructor.
-     * @param ViewFactory|null $viewFactory
-     * @param Loader|null $configurationsLoader
-     */
-    public function __construct(ViewFactory $viewFactory = null, Loader $configurationsLoader = null)
-    {
-        $this->configurationsLoader = $configurationsLoader ?? GeneralUtility::makeInstance(Loader::class);
-        $this->viewFactory = $viewFactory ?? GeneralUtility::makeInstance(ViewFactory::class);
+    public function __construct(
+        private readonly ViewFactory $viewFactory,
+        private readonly Loader $configurationsLoader,
+        private readonly PageRenderer $pageRenderer,
+    ) {
     }
 
     public function checkAccess()
@@ -50,6 +36,8 @@ class ToolbarItem implements ToolbarItemInterface
 
     public function getItem()
     {
+        $this->pageRenderer->addInlineLanguageLabelFile('EXT:run_script/Resources/Private/Language/locallang.xlf');
+
         return $this->renderView('Item');
     }
 
