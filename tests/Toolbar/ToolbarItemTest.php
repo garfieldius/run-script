@@ -18,10 +18,18 @@ use GrossbergerGeorg\RunScript\Configuration\Script;
 use GrossbergerGeorg\RunScript\Toolbar\ToolbarItem;
 use GrossbergerGeorg\RunScript\Toolbar\ViewFactory;
 use PHPUnit\Framework\TestCase;
+use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class ToolbarItemTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        if (!defined('LF')) {
+            define('LF', "\n");
+        }
+    }
+
     public function testGetAdditionalAttributes()
     {
         [$subject] = $this->getSubject();
@@ -74,9 +82,11 @@ class ToolbarItemTest extends TestCase
 
     public function testGetItem()
     {
-        [$subject, $viewFactory, $loader] = $this->getSubject();
+        [$subject, $viewFactory, $loader, $pageRenderer] = $this->getSubject();
         $expected = 'HTML';
         $scripts = [new Script('default', 'some_script', 'Hello Test', 'echo Hello', 0)];
+
+        $pageRenderer->expects(self::once())->method('addInlineLanguageLabelFile');
 
         $loader->expects(static::any())->method('getForCurrentUser')->willReturn($scripts);
 
@@ -94,8 +104,9 @@ class ToolbarItemTest extends TestCase
     {
         $viewFactory = $this->createMock(ViewFactory::class);
         $loader = $this->createMock(Loader::class);
-        $subject = new ToolbarItem($viewFactory, $loader);
+        $pageRenderer = $this->createMock(PageRenderer::class);
+        $subject = new ToolbarItem($viewFactory, $loader, $pageRenderer);
 
-        return [$subject, $viewFactory, $loader];
+        return [$subject, $viewFactory, $loader, $pageRenderer];
     }
 }
