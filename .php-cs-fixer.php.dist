@@ -77,7 +77,9 @@ return (new Config())
         'explicit_string_variable'     => true,
         'fully_qualified_strict_types' => true,
         'function_to_constant'         => true,
-        'function_typehint_space'      => true,
+        'type_declaration_spaces' => [
+            'elements' => ['function', 'property'],
+        ],
         'header_comment'               => [
             'comment_type' => 'comment',
             'header'       => $header,
@@ -100,7 +102,10 @@ return (new Config())
         'new_with_braces'                         => true,
         'no_blank_lines_after_class_opening'      => true,
         'no_blank_lines_after_phpdoc'             => true,
-        'no_blank_lines_before_namespace'         => true,
+        'blank_lines_before_namespace'         => [
+            'min_line_breaks' => 2,
+            'max_line_breaks' => 2,
+        ],
         'no_empty_comment'                        => true,
         'no_empty_phpdoc'                         => true,
         'no_empty_statement'                      => true,
@@ -114,8 +119,9 @@ return (new Config())
         'no_spaces_around_offset'         => [
             'positions' => ['inside', 'outside'],
         ],
-        'no_trailing_comma_in_list_call'         => true,
-        'no_trailing_comma_in_singleline_array'  => true,
+        'no_trailing_comma_in_singleline' => [
+            'elements' => ['arguments', 'array', 'array_destructuring', 'group_import'],
+        ],
         'no_unneeded_control_parentheses'        => true,
         'no_unused_imports'                      => true,
         'no_whitespace_in_blank_line'            => true,
